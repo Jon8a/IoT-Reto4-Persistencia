@@ -12,10 +12,11 @@ services:
       - QDB_CAIRO_COMMIT_LAG=100
       - QDB_LINE_TCP_MSG_BUFFER_SIZE=10485760
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/9000' 2>/dev/null && echo ok || exit 1"]
+      start_period: 20s   # tiempo para que arranque la JVM antes del primer check
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 15
 
   metabase:
     image: metabase/metabase:latest
